@@ -101,4 +101,4 @@ jobs:
       - name : Deploy Documentation 
         env : 
           NETLIFY_AUTH_TOKEN : ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run : netlify deploy -p --dir=documentation --site=$NETLIFY_SITE_ID --prod
+        run : netlify deploy -p --dir=target/reports/apidocs/ --site=$NETLIFY_SITE_ID --prod
