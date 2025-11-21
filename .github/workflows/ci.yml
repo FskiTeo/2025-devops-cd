@@ -70,7 +70,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with : 
           name : documentation
-          path : target/site/apidocs/
+          path : target/reports/apidocs/
 
   deploy-render:
     runs-on: ubuntu-latest
@@ -93,7 +93,7 @@ jobs:
         uses : actions/download-artifact@v4
         with :
           name : documentation
-          path : target/site/apidocs/
+          path : target/reports/apidocs/
 
       - name : Install Netlify CLI
         run : npm install -g netlify-cli
