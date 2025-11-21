@@ -31,6 +31,6 @@ public class HealthService {
             return new HealthStatusDto("Data base communicated in a weird way", HealthStatusDto.Status.DOWN);
         }
 
-        return new HealthStatusDto("DB is ok", HealthStatusDto.Status.UP);
+        return new HealthStatusDto("DB looks ok", HealthStatusDto.Status.UP);
     }
 }
