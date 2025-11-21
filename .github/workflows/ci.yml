@@ -64,6 +64,14 @@ jobs:
       - name: Generate Documentation
         run: ./mvnw javadoc:javadoc
 
+      ### Runs only if the branch is main
+      - name : Deploy documentation on netlify
+        uses : actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with : 
+          name : documentation
+          path : target/site/apidocs/
+
   deploy-render:
     runs-on: ubuntu-latest
     needs: docker-build
@@ -72,3 +80,25 @@ jobs:
       - name: Trigger render deployment
         run: |
           curl -X GET ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+  deploy-documentation:
+    runs-on : ubuntu-latest
+    needs : documentation-build
+    if : github.ref == 'refs/heads/main'
+    steps :
+      - name : Checkout code 
+        uses : actions/checkout@v3
+      
+      - name : Dowload Documentation
+        uses : actions/download-artifact@v4
+        with :
+          name : documentation
+          path : documentation
+
+      - name : Install Netlify CLI
+        run : npm install -g netlify-cli
+      
+      - name : Deploy Documentation 
+        env : 
+          NETLIFY_AUTH_TOKEN : ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run : netlify deploy -p --dir=documentation --site=$NETLIFY_SITE_ID --prod
